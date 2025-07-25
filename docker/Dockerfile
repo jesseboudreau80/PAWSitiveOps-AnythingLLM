@@ -1,5 +1,8 @@
-# Setup base image
 FROM ubuntu:jammy-20240627.1 AS base
+
+# Make a writable folder for SQLite and tell the app where to find it
+ENV STORAGE_DIR=/tmp/storage
+RUN mkdir -p $STORAGE_DIR
 
 # Build arguments
 ARG ARG_UID=1000
