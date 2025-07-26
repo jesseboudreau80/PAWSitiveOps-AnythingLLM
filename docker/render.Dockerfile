@@ -1,4 +1,4 @@
-# This is the dockerfile spefically to be used with Render.com & Railway.app docker deployments. Do not use
+# This is the dockerfile specifically to be used with Render.com & Railway.app docker deployments. Do not use
 # locally or in other environments as it will not be supported.
 
 # Setup base image
@@ -45,6 +45,14 @@ COPY --chown=anythingllm:anythingllm ./docker/.env.example /app/server/.env
 RUN chmod +x /usr/local/bin/render-entrypoint.sh && \
     chmod +x /usr/local/bin/docker-healthcheck.sh
 
+# Create the /storage mountpoint and give ownership to our non-root user
+USER root
+RUN mkdir -p /storage && chown -R anythingllm:anythingllm /storage
+
+# Set STORAGE_DIR to the persistent volume
+ENV STORAGE_DIR=/storage
+
+# Switch back to non-root for the application
 USER anythingllm
 WORKDIR /app
 
@@ -85,10 +93,9 @@ USER anythingllm
 # Fix path to chrome executable as the runner will assume the file is in `/root/.cache`
 ENV PUPPETEER_EXECUTABLE_PATH=/app/.cache/puppeteer/chrome/linux-119.0.6045.105/chrome-linux64/chrome
 
-ENV NODE_ENV=production
-ENV ANYTHING_LLM_RUNTIME=docker
-ENV STORAGE_DIR=$STORAGE_DIR
-ENV DEPLOYMENT_VERSION=1.8.3
+ENV NODE_ENV=production \
+    ANYTHING_LLM_RUNTIME=docker \
+    DEPLOYMENT_VERSION=1.8.3
 
 # Expose the server port
 EXPOSE 3001
