@@ -48,7 +48,7 @@ RUN groupadd -g "$ARG_GID" anythingllm && \
 # Copy docker helper scripts
 COPY ./docker/docker-entrypoint.sh /usr/local/bin/
 COPY ./docker/docker-healthcheck.sh /usr/local/bin/
-COPY --chown=anythingllm:anythingllm ./docker/.env.example
+COPY --chown=anythingllm:anythingllm ./docker/.env.example /app/server/.env
 # Ensure the STORAGE_DIR var is set in the .env that the server actually loads
 RUN echo "STORAGE_DIR=/tmp/storage" >> /app/server/.env
 
