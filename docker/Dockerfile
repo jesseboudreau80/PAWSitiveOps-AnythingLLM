@@ -183,3 +183,5 @@ HEALTHCHECK --interval=1m --timeout=10s --start-period=1m \
 # Run the server
 # CMD ["sh", "-c", "tail -f /dev/null"] # For development: keep container open
 ENTRYPOINT ["/bin/bash", "/usr/local/bin/docker-entrypoint.sh"]
+# Tell Docker (and Render) which port the app uses
+EXPOSE 8888
