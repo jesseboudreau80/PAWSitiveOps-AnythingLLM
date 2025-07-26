@@ -1,18 +1,37 @@
-**/server/utils/agents/aibitat/example/**
-**/server/storage/documents/**
-**/server/storage/vector-cache/**
-**/server/storage/*.db
-**/server/storage/lancedb
-**/collector/hotdir/**
-**/collector/outputs/**
-**/node_modules/
-**/dist/
-**/v-env/
-**/__pycache__/
-**/.env
-**/.env.*
-**/bundleinspector.html
-**/tmp/**
-**/.log
+# -- Version control
+.git
+
+# -- Node and build artifacts
+node_modules/
+dist/
+frontend/build/
+
+# -- Python/virtualenv
+v-env/
+__pycache__/
+
+# -- Environment files & logs
+.env
+.env.*
+*.log
+
+# -- Temporary files
+tmp/
+bundleinspector.html
+
+# -- Server storage caches & data
+server/storage/documents/
+server/storage/vector-cache/
+server/storage/*.db
+server/storage/lancedb
+
+# -- Collector outputs
+collector/hotdir/
+collector/outputs/
+
+# -- Agent example code (not needed in production)
+server/utils/agents/aibitat/example/
+
+# Allow these example env files into the image
 !docker/.env.example
 !frontend/.env.production
