@@ -1,21 +1,31 @@
+// .devcontainer/devcontainer.json
 {
   "name": "PAWSitiveOps-AnythingLLM",
-  "remoteUser": "vscode",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:18-bullseye",
+  "remoteUser": "root",
 
-  // build from your Render Dockerfile
+  // ← Add this entire block:
   "build": {
-    "context": "..",
-    "dockerfile": "../docker/render.Dockerfile"
-  },
-
-  // no extra "features" or extensions yet
-  "customizations": {
-    "vscode": {
-      "extensions": []
+    "args": {
+      "STORAGE_DIR": "/workspaces/PAWSitiveOps-AnythingLLM/server/storage"
     }
   },
 
-  // just for sanity check
-  "postCreateCommand": "echo \"✅ Container booted successfully\"",
-  "shutdownAction": "none"
+  "features": {
+    "ghcr.io/dhoeric/features/hadolint:1": { "version": "latest" },
+    "ghcr.io/devcontainers/features/terraform:1": {},
+    "ghcr.io/devcontainers-contrib/features/apt-packages:1": {
+      "packages": [
+        /* … all your other packages … */,
+        "libssl1.1"
+      ]
+    }
+  },
+
+  "postCreateCommand": "…",
+  "updateContentCommand": "…",
+  "portsAttributes": { "3001": { "label": "Backend", "onAutoForward": "notify" }, "3000": { "label": "Frontend", "onAutoForward": "openPreview" } },
+  "capAdd": ["SYS_ADMIN"],
+  "remoteEnv": { "NODE_ENV": "development", "ESLINT_USE_FLAT_CONFIG": "true", "ANYTHING_LLM_RUNTIME": "docker" },
+  "shutdownAction": "stopContainer"
 }
