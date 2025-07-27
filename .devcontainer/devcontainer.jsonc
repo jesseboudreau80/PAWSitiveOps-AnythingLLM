@@ -1,10 +1,12 @@
 // .devcontainer/devcontainer.json
 {
+  "$schema": "https://containers.dev/schemas/v2",
+
+  "schemaVersion": "2.0.0",
   "name": "PAWSitiveOps-AnythingLLM",
   "image": "mcr.microsoft.com/devcontainers/javascript-node:18-bullseye",
   "remoteUser": "root",
 
-  // ← Add this entire block:
   "build": {
     "args": {
       "STORAGE_DIR": "/workspaces/PAWSitiveOps-AnythingLLM/server/storage"
@@ -14,9 +16,12 @@
   "features": {
     "ghcr.io/dhoeric/features/hadolint:1": { "version": "latest" },
     "ghcr.io/devcontainers/features/terraform:1": {},
-    "ghcr.io/devcontainers-contrib/features/apt-packages:1": {
+    "ghcr.io/devcontainers-extra/features/apt-packages:1": {
       "packages": [
-        /* … all your other packages … */,
+        "build-essential",
+        "ca-certificates",
+        "curl",
+        // … all your other packages here …
         "libssl1.1"
       ]
     }
