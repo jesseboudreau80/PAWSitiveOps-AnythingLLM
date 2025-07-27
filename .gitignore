@@ -1,6 +1,9 @@
 v-env
 .env
 !.env.example
+# local environment variables
+.env
+
 
 node_modules
 __pycache__
