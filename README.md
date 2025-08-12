@@ -3,16 +3,22 @@ PAWSitiveOps-AnythingLLM is the AI backbone for the PAWSitiveOps platform.
 It packages an AnythingLLM deployment and integration glue so we can run specialized compliance & operations chatbots for pet/vet centers, then expose them to React/FastAPI apps and n8n automations.
 
 This repo focuses on infrastructure + integration (not the upstream AnythingLLM code).
-Think: env setup, deploy configs, routing, and recipes to wire agents into real workflows.
+Think: environment setup, deployment configs, routing, and recipes to wire agents into real workflows.
 
 🎯 Purpose
 Provide a repeatable deployment of AnythingLLM (cloud or Docker)
 
-Standardize workspace/agent setup for PAWSitiveOps personas (Compliance Hound, Sam the Safety Dog, etc.)
+Standardize workspace/agent setup for PAWSitiveOps personas:
+
+Compliance Hound
+
+Sam the Safety Dog
+
+Operations Bulldog
 
 Offer clean endpoints so frontends (React) and services (FastAPI, n8n) can talk to our agents
 
-Keep credentials and provider keys cleanly managed with environment variables
+Keep credentials and provider keys securely managed with environment variables
 
 👨‍💻 My Role
 Designed the deployment approach (Render/Docker) and env layout
@@ -38,7 +44,7 @@ n8n – Workflow automation to orchestrate intake → embed → respond
 
 PostgreSQL / SQLite – Vector/storage options depending on target env
 
-Object Storage – (Optional) doc archives (S3-compatible)
+Object Storage – (Optional) document archives (S3-compatible)
 
 📦 Current & Planned Use Cases
 ✅ Current
@@ -47,7 +53,7 @@ Stand up an AnythingLLM instance for PAWSitiveOps
 
 Define agent/workspace conventions (naming, roles, retrieval settings)
 
-Set env scaffolding for LLM provider keys and embeddings
+Set environment scaffolding for LLM provider keys and embeddings
 
 🚀 Planned
 
@@ -57,9 +63,9 @@ Sam the Safety Dog – Safety/SOP Q&A with document retrieval
 
 Operations Bulldog – Day-to-day ops, customer-service scripts, checklists
 
-Marketing Poodle – (Optional) social copy & campaign ideas
+Marketing Poodle (Optional) – Social copy & campaign ideas
 
-External Apps – VagalFit, DealAgent007, or IndieSmithy UI consuming the same agent API
+External Apps – VagalFit, DealAgent007, IndieSmithy UI consuming the same agent API
 
 n8n Pipelines – Auto-ingest PDFs/URLs → embed → notify → serve in chat
 
@@ -125,7 +131,7 @@ pawsops-safety-dog
 
 pawsops-operations-bulldog
 
-Attach docs/links → set retrieval settings.
+Attach documents/links → set retrieval settings.
 
 🐍 FastAPI Router Stub
 Example main.py for routing chat calls to AnythingLLM:
@@ -153,8 +159,8 @@ def ask_workspace(workspace: str, query: dict):
         raise HTTPException(status_code=response.status_code, detail=response.text)
     return response.json()
 📒 Workspace Playbook
-A step-by-step guide for creating, maintaining, and updating workspaces is available in docs/PLAYBOOK.md (to be created).
-It will cover:
+A step-by-step guide for creating, maintaining, and updating workspaces is available in the Workspace Playbook.
+It covers:
 
 Naming conventions
 
@@ -194,12 +200,3 @@ Unified metrics/logging dashboard
 React chatbot widget for embedding in sites
 
 Enterprise connectors (SharePoint, S3, GDrive)
-
-
-
-
-
-
-
-
-
