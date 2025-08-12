@@ -1,101 +1,91 @@
-🐾 PAWSitiveOps – AnythingLLM
-PAWSitiveOps-AnythingLLM is the AI backbone for the PAWSitiveOps platform.
-It packages an AnythingLLM deployment and integration glue so we can run specialized compliance & operations chatbots for pet/vet centers, then expose them to React/FastAPI apps and n8n automations.
+# 🐾 PAWSitiveOps – AnythingLLM
 
-This repo focuses on infrastructure + integration (not the upstream AnythingLLM code).
+**PAWSitiveOps-AnythingLLM** is the AI backbone for the PAWSitiveOps platform.  
+It packages an **AnythingLLM** deployment and integration glue so we can run **specialized compliance & operations chatbots** for pet/vet centers, then expose them to **React/FastAPI apps** and **n8n automations**.
+
+This repo focuses on **infrastructure + integration** (not the upstream AnythingLLM code).  
 Think: environment setup, deployment configs, routing, and recipes to wire agents into real workflows.
 
-🎯 Purpose
-Provide a repeatable deployment of AnythingLLM (cloud or Docker)
+---
 
-Standardize workspace/agent setup for PAWSitiveOps personas:
+## 🎯 Purpose
 
-Compliance Hound
+- Provide a **repeatable deployment** of AnythingLLM (cloud or Docker)  
+- Standardize **workspace/agent setup** for PAWSitiveOps personas:  
+  - Compliance Hound  
+  - Sam the Safety Dog  
+  - Operations Bulldog  
+- Offer **clean endpoints** so frontends (React) and services (FastAPI, n8n) can talk to our agents  
+- Keep credentials and provider keys **securely managed** with environment variables  
 
-Sam the Safety Dog
+---
 
-Operations Bulldog
+## 👨‍💻 My Role
 
-Offer clean endpoints so frontends (React) and services (FastAPI, n8n) can talk to our agents
+- Designed the **deployment approach** (Render/Docker) and env layout  
+- Built integration patterns for **webhooks**, **document ingestion**, and **chat completions**  
+- Planned the **multi-agent routing** so different PAWSitiveOps bots can serve multiple apps  
+- Documented usage for teammates and future contributors  
 
-Keep credentials and provider keys securely managed with environment variables
+---
 
-👨‍💻 My Role
-Designed the deployment approach (Render/Docker) and env layout
+## 🛠️ Technologies Used
 
-Built integration patterns for webhooks, document ingestion, and chat completions
+- **AnythingLLM** – LLM router, vector index, workspaces  
+- **Docker / Docker Compose** – Containerized deploys  
+- **Render** – *(Planned/Active)* one-click cloud hosting  
+- **FastAPI** – *(Planned)* thin API that fronts agent calls for apps  
+- **React** – *(Planned)* frontends consuming agent endpoints  
+- **n8n** – Workflow automation to orchestrate intake → embed → respond  
+- **PostgreSQL / SQLite** – Vector/storage options depending on target env  
+- **Object Storage** – *(Optional)* document archives (S3-compatible)  
 
-Planned the multi-agent routing so different PAWSitiveOps bots can serve multiple apps
+---
 
-Documented usage for teammates and future contributors
+## 📦 Current & Planned Use Cases
 
-🛠️ Technologies Used
-AnythingLLM – LLM router, vector index, workspaces
+**✅ Current**
+- Stand up an **AnythingLLM** instance for PAWSitiveOps  
+- Define **agent/workspace conventions** (naming, roles, retrieval settings)  
+- Set environment scaffolding for **LLM provider keys** and embeddings  
 
-Docker / Docker Compose – Containerized deploys
+**🚀 Planned**
+- **Compliance Hound** – Answers licensing/permit questions and links citations  
+- **Sam the Safety Dog** – Safety/SOP Q&A with document retrieval  
+- **Operations Bulldog** – Day-to-day ops, customer-service scripts, checklists  
+- **Marketing Poodle** *(Optional)* – Social copy & campaign ideas  
+- **External Apps** – VagalFit, DealAgent007, IndieSmithy UI consuming the same agent API  
+- **n8n Pipelines** – Auto-ingest PDFs/URLs → embed → notify → serve in chat  
 
-Render – (Planned/Active) one-click cloud hosting
+---
 
-FastAPI – (Planned) thin API that fronts agent calls for apps
+## 🔍 Workflow Example – Multi-App Agent Routing
+[Frontend (React)] [n8n Webhook] [CLI/Script]
+\ | /
+\ | /
+\ | /
++-----[ FastAPI Router ]-----+
+|
+v
+[ AnythingLLM API ]
+| Workspaces |
+| Retrieval |
+| Embeddings |
+|
+[ Vector / Storage ]
+|
+v
+[ Response to Caller ]
 
-React – (Planned) frontends consuming agent endpoints
 
-n8n – Workflow automation to orchestrate intake → embed → respond
+---
 
-PostgreSQL / SQLite – Vector/storage options depending on target env
+## ⚙️ Quick Start
 
-Object Storage – (Optional) document archives (S3-compatible)
+### 1) Environment Variables
+Create `.env` with:
 
-📦 Current & Planned Use Cases
-✅ Current
-
-Stand up an AnythingLLM instance for PAWSitiveOps
-
-Define agent/workspace conventions (naming, roles, retrieval settings)
-
-Set environment scaffolding for LLM provider keys and embeddings
-
-🚀 Planned
-
-Compliance Hound – Answers licensing/permit questions and links citations
-
-Sam the Safety Dog – Safety/SOP Q&A with document retrieval
-
-Operations Bulldog – Day-to-day ops, customer-service scripts, checklists
-
-Marketing Poodle (Optional) – Social copy & campaign ideas
-
-External Apps – VagalFit, DealAgent007, IndieSmithy UI consuming the same agent API
-
-n8n Pipelines – Auto-ingest PDFs/URLs → embed → notify → serve in chat
-
-🔍 Workflow Example – Multi-App Agent Routing
-less
-Copy
-Edit
-[Frontend (React)]  [n8n Webhook]  [CLI/Script]
-        \              |               /
-         \             |              /
-          \            |             /
-           +-----[ FastAPI Router ]-----+
-                         |
-                         v
-                [ AnythingLLM API ]
-                 |   Workspaces   |
-                 |   Retrieval    |
-                 |   Embeddings   |
-                         |
-                [ Vector / Storage ]
-                         |
-                         v
-               [ Response to Caller ]
-⚙️ Quick Start
-1) Environment Variables
-Create .env with:
-
-ini
-Copy
-Edit
+```ini
 OPENAI_API_KEY=...
 ANTHROPIC_API_KEY=...
 GROQ_API_KEY=...
@@ -103,10 +93,24 @@ EMBEDDINGS_PROVIDER=openai
 DATABASE_URL=sqlite:///./anythingllm.db
 PORT=3001
 CORS_ORIGIN=https://your-frontend.example
-2) Docker Compose Setup
-yaml
-Copy
-Edit
+
+
+---
+
+## ⚙️ Quick Start
+
+### 1) Environment Variables
+Create `.env` with:
+
+```ini
+OPENAI_API_KEY=...
+ANTHROPIC_API_KEY=...
+GROQ_API_KEY=...
+EMBEDDINGS_PROVIDER=openai
+DATABASE_URL=sqlite:///./anythingllm.db
+PORT=3001
+CORS_ORIGIN=https://your-frontend.example
+
 version: "3.9"
 services:
   anythingllm:
@@ -118,12 +122,11 @@ services:
     volumes:
       - ./data:/app/server/storage
     restart: unless-stopped
+
 Run:
 
-bash
-Copy
-Edit
 docker compose up -d
+
 3) Create Workspaces
 pawsops-compliance-hound
 
@@ -135,10 +138,6 @@ Attach documents/links → set retrieval settings.
 
 🐍 FastAPI Router Stub
 Example main.py for routing chat calls to AnythingLLM:
-
-python
-Copy
-Edit
 from fastapi import FastAPI, HTTPException
 import requests
 import os
@@ -158,6 +157,7 @@ def ask_workspace(workspace: str, query: dict):
     if response.status_code != 200:
         raise HTTPException(status_code=response.status_code, detail=response.text)
     return response.json()
+
 📒 Workspace Playbook
 A step-by-step guide for creating, maintaining, and updating workspaces is available in the Workspace Playbook.
 It covers:
