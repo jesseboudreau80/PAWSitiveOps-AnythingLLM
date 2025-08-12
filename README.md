@@ -83,44 +83,41 @@ Edit
                          |
                          v
                [ Response to Caller ]
-Highlights
-
-Multiple apps hit a single FastAPI router for clean auth/logging
-
-Router forwards to AnythingLLM and selects workspace/agent
-
-Documents are ingested via n8n (scheduled/webhook) and embedded
-
-Responses flow back to the caller with sources/citations where available
-
 ⚙️ Quick Start
-This repo is an integration layer. It assumes you’re deploying the official AnythingLLM image, then applying our env + routing conventions.
-
 1) Environment Variables
-Create .env (or set variables in Render) with keys like:
+Create .env with:
 
 ini
 Copy
 Edit
-# LLM Providers (choose what you use)
 OPENAI_API_KEY=...
 ANTHROPIC_API_KEY=...
 GROQ_API_KEY=...
-
-# Embeddings / Storage (example)
 EMBEDDINGS_PROVIDER=openai
 DATABASE_URL=sqlite:///./anythingllm.db
-
-# App
 PORT=3001
 CORS_ORIGIN=https://your-frontend.example
-2) Run (Docker)
-nginx
+2) Docker Compose Setup
+yaml
+Copy
+Edit
+version: "3.9"
+services:
+  anythingllm:
+    image: mintplexlabs/anythingllm:latest
+    ports:
+      - "3001:3001"
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/server/storage
+    restart: unless-stopped
+Run:
+
+bash
 Copy
 Edit
 docker compose up -d
-Visit the exposed port, create your admin, and set up workspaces.
-
 3) Create Workspaces
 pawsops-compliance-hound
 
@@ -128,49 +125,81 @@ pawsops-safety-dog
 
 pawsops-operations-bulldog
 
-Attach your docs/links and set retrieval options.
+Attach docs/links → set retrieval settings.
 
-4) Connect Apps
-FastAPI: point a route like /api/ask/{workspace} → AnythingLLM chat endpoint
+🐍 FastAPI Router Stub
+Example main.py for routing chat calls to AnythingLLM:
 
-React: call FastAPI; render messages + citations
+python
+Copy
+Edit
+from fastapi import FastAPI, HTTPException
+import requests
+import os
 
-n8n: a) ingest docs via HTTP node, b) ping embeddings API, c) notify Slack/Teams
+app = FastAPI()
+ANYTHINGLLM_URL = os.getenv("ANYTHINGLLM_URL", "http://localhost:3001")
+API_KEY = os.getenv("ANYTHINGLLM_API_KEY")
+
+@app.post("/api/ask/{workspace}")
+def ask_workspace(workspace: str, query: dict):
+    headers = {"Authorization": f"Bearer {API_KEY}"}
+    response = requests.post(
+        f"{ANYTHINGLLM_URL}/api/v1/workspace/{workspace}/chat",
+        headers=headers,
+        json={"message": query.get("message", "")}
+    )
+    if response.status_code != 200:
+        raise HTTPException(status_code=response.status_code, detail=response.text)
+    return response.json()
+📒 Workspace Playbook
+A step-by-step guide for creating, maintaining, and updating workspaces is available in docs/PLAYBOOK.md (to be created).
+It will cover:
+
+Naming conventions
+
+Role descriptions
+
+Retrieval settings
+
+Document ingestion workflows (manual + n8n automated)
+
+Best practices for prompt engineering in AnythingLLM
 
 🔐 Security Notes
-Keep provider keys in .env / Render Secrets (never commit!)
+Keep provider keys in .env or Render Secrets
 
-Restrict CORS to your domains
+Restrict CORS to trusted domains
 
-Add a token or JWT layer in FastAPI when exposing public endpoints
+Use JWT or API key auth for public endpoints
 
-Consider request quotas and logging for auditability
+Log requests for audit and debugging
 
 📚 Lessons Learned
-A thin router layer in front of AnythingLLM keeps frontends simple
+Thin router layer keeps apps clean
 
-Standardized workspace naming prevents messy agent sprawl
+Workspace standardization avoids confusion
 
-Doc ingestion works best when automated (n8n) and versioned
+Automated ingestion is key for freshness
 
-Treat prompts as config, not code, so updates don’t require deploys
+Prompts as config = easier iteration
 
 🗺️ Future Plans
-One-click Render deploy for the full stack (AnythingLLM + FastAPI)
+One-click Render deploy (AnythingLLM + FastAPI)
 
-Workspace seeding script (provision agents + upload starter docs)
+Workspace seeding script
 
-Unified logging/metrics dashboard (requests, tokens, latency)
+Unified metrics/logging dashboard
 
-Example React chatbot widget for drop-in use across sites
+React chatbot widget for embedding in sites
 
-Playbooks for enterprise data sources (SharePoint, S3, GDrive)
+Enterprise connectors (SharePoint, S3, GDrive)
 
-🤝 Contributing
-Issues and PRs are welcome—especially around deployment templates, router code, and workspace best practices.
-Please see CONTRIBUTING.md (coming soon) for guidelines.
 
-📄 Attribution
-This project integrates the excellent AnythingLLM.
-All upstream code, licenses, and trademarks belong to their respective owners.
-This repo focuses on deployment & integration patterns tailored for PAWSitiveOps.
+
+
+
+
+
+
+
