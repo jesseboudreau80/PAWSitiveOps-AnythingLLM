@@ -1,15 +1,19 @@
-v-env
-.env
-!.env.example
-# local environment variables
-.env
-
-
-node_modules
-__pycache__
-v-env
-.DS_Store
 aws_cf_deploy_anything_llm.json
-yarn.lock
 *.bak
+build/
+.coverage
+dist/
+.DS_Store
+.env
+.env.*
+!.env.example
 .idea
+# local environment variables
+node_modules
+node_modules/
+__pycache__
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+v-env
+yarn.lock
