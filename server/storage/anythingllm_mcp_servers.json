@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "jb-mcp": {
+      "name": "JB MCP Server",
+      "type": "http",
+      "url": "https://jb-mcp.ngrok.app",
+      "headers": {
+        "Content-Type": "application/json"
+      }
+    }
+  }
+}
