@@ -22,6 +22,7 @@ const fileUploadStorage = multer.diskStorage({
     // process.env.NODE_ENV === "development"
     //   ? path.resolve(__dirname, `../../../collector/hotdir`)
     //   : path.resolve(process.env.STORAGE_DIR, `../../collector/hotdir`);
+    fs.mkdirSync(uploadOutput, { recursive: true });
     cb(null, uploadOutput);
   },
   filename: function (_, file, cb) {
@@ -43,6 +44,7 @@ const fileAPIUploadStorage = multer.diskStorage({
     //   process.env.NODE_ENV === "development"
     //     ? path.resolve(__dirname, `../../../collector/hotdir`)
     //     : path.resolve(process.env.STORAGE_DIR, `../../collector/hotdir`);
+    fs.mkdirSync(uploadOutput, { recursive: true });
     cb(null, uploadOutput);
   },
   filename: function (_, file, cb) {
